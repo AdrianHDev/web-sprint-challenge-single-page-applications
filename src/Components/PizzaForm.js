@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as yup from "yup";
+import  * as yup from "yup";
 
 const initialPizza = {
     name: "",
@@ -11,6 +11,15 @@ const initialPizza = {
     "special-text": ""
 }
 
+const pizzaSchema = yup.object().shape({
+    name: yup.string().required().min(5, "name must be at least 2 characters"),
+    size: yup.string().required().matches(/(Small|Medium|Large)/),
+    pepperoni: yup.bool().required(),
+    sausage: yup.bool().required(),
+    "canadian-bacon": yup.bool().required(),
+    pineapple: yup.bool().required(),
+    "special-text": yup.string().required(),
+})
 
 
 const PizzaForm = () => {
@@ -40,9 +49,9 @@ const PizzaForm = () => {
             <label>
                 <b>Size:</b><br/>
                 <select id='size-dropdown' name="size" value={curPizza.size} onChange={handleSel}>
-                    <option value="small">small</option>
-                    <option value="medium">medium</option>
-                    <option value="large">large</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
                 </select>
             </label><br/>
             <label>
