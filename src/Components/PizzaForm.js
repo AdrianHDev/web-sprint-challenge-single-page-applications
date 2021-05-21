@@ -27,21 +27,21 @@ const pizzaSchema = yup.object().shape({
 
 const PizzaForm = () => {
     const [curOrder, setCurOrder] = useState(initialPizza)
-    const [errors, setErrors] = useState([])
+    const [error, setError] = useState()
 
 
     const submitClicked = (event) => {
         event.preventDefault();
-        setErrors([]);
+        setError();
         pizzaSchema.validate(curOrder)
         .catch(e => {
             console.error(e.errors);
-            setErrors(e.errors);
+            setError(e.errors[0]);
             console.log(e.errors.length)
             return(e.errors)
         }).then((errlist) => {
             if (!Array.isArray(errlist)) {
-                console.log('Calling axios with list \n', curOrder)
+                console.log('Calling axios with list:\n', curOrder)
                 axios.post("https://reqres.in/api/orders", curOrder)
                     .then(response => console.log('Response:', response))
                     .catch(err => console.error(err));}})
@@ -97,9 +97,7 @@ const PizzaForm = () => {
                 <b>Special Instructions</b>:<br/>
                 <input name="special-text" type="text" value={curOrder['special-text']} onChange={updateValue} id="special-text"/><br/>
             </label>
-            {errors.map(err => {
-                return(<b style={{color: 'red'}}>{err}<br/></b>)
-            })}
+            <b style={{color: 'red'}}>{error}<br/></b>
             <button id='order-button' onClick={submitClicked}>Submit Order</button>
         </form>
     );
