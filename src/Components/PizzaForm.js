@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as yup from 'yup';
+import * as yup from "yup";
 
 const initialPizza = {
     name: "",
@@ -11,15 +11,7 @@ const initialPizza = {
     "special-text": ""
 }
 
-const pizzaSchema = yup.object().shape({
-    name: yup().required().string().min(5, "name must be at least 2 characters"),
-    size: yup().required().string().matches(/(Small|Medium|Large)/),
-    pepperoni: yup().required().bool(),
-    sausage: yup().required().bool(),
-    "canadian-bacon": yup().required().bool(),
-    pineapple: yup().required().bool(),
-    "special-text": yup().required().string()
-})
+
 
 const PizzaForm = () => {
     const [curPizza, setCurPizza] = useState(initialPizza)
@@ -34,17 +26,17 @@ const PizzaForm = () => {
         })
     }
     const handleSel = (event) => {
-        setCurPIzza({ ...curPizza, [event.target.parent.name]: event.target.value })
+        setCurPizza({ ...curPizza, [event.target.parent.name]: event.target.value })
     }
 
     return (
         <form id='pizza-form'>
             <label>
-                Name:<br/>
+                <b>Name:</b><br/>
                 <input type="text" id='name-input' name="name" value={curPizza.name}></input>
             </label><br/>
             <label>
-                Size:<br/>
+                <b>Size:</b><br/>
                 <select id='size-dropdown' name="size" value={curPizza.size} onChange={handleSel}>
                     <option value="small">small</option>
                     <option value="medium">medium</option>
@@ -52,7 +44,7 @@ const PizzaForm = () => {
                 </select>
             </label><br/>
             <label>
-                Toppings:
+                <b>Toppings:</b><br/>
                 <label>
                     Pepperoni:
                     <input onChange={toggleTopping} type='checkbox' checked={curPizza.pepperoni} name='pepperoni'></input>
@@ -78,3 +70,5 @@ const PizzaForm = () => {
         </form>
     );
 }
+
+export default PizzaForm;

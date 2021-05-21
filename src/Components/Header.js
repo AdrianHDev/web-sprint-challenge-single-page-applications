@@ -1,3 +1,4 @@
+import { useHistory } from "react-router";
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
@@ -16,17 +17,18 @@ const StyledHeader = styled.header`
   ul li a { color: yellow }
 `
 
-const disableRefresh = (ev) => {
-    ev.preventDefault()
-  }
-
 const Header = () => {
+  const history = useHistory();
+  const updateUrl = (ev) => {
+      ev.preventDefault()
+      history.push(ev.target.target)
+    }
     return (
     <StyledHeader>
     <h1>Lambda Eats</h1>
     <ul>
-    <li><a onClick={disableRefresh} href="/">Home</a></li>
-    <li><a onClick={disableRefresh} href="pizza/">Order</a></li>
+    <li><a onClick={updateUrl} href="/" target="/">Home</a></li>
+    <li><a onClick={updateUrl} href="/" target="/pizza">Order</a></li>
     <li>Contact</li>
     </ul>
     </StyledHeader>
