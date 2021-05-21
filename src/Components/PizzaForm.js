@@ -27,12 +27,14 @@ const pizzaSchema = yup.object().shape({
 
 const PizzaForm = () => {
     const [curPizza, setCurPizza] = useState(initialPizza)
+    const [success, setSuccess] = useState();
 
     const submitRequest = (data) => {
         axios.post(reqUri, data)
             .catch(err => console.error(err))
             .then(res => console.log(res));
     }
+
     const submitClicked = (event) => {
         event.preventDefault();
         let errors = [];
@@ -40,13 +42,16 @@ const PizzaForm = () => {
         .catch(e => {
             console.error(e);
             errors = e;
+            setSuccess(false)
         }).then(() => {
             if (errors.length === 0) {
                 submitRequest(curPizza);
+                setSuccess(true)
             }
         })
     }
     const updateValue = (event) => {
+        console.log(event);
         setCurPizza({ ...curPizza, [event.target.name]: event.target.value })
     }
 
@@ -58,7 +63,7 @@ const PizzaForm = () => {
         console.log(curPizza);
     }
     const handleSel = (event) => {
-        setCurPizza({ ...curPizza, [event.target.parent.name]: event.target.value })
+        setCurPizza({ ...curPizza, [event.target.name]: event.target.value })
     }
 
     return (
@@ -96,9 +101,9 @@ const PizzaForm = () => {
             </label>
             <label>
                 <b>Special Instructions</b>:<br/>
-                <input type="text" value={curPizza['special-text']} onChange={updateValue} id="special-text"/><br/>
+                <input name="special-text" type="text" value={curPizza['special-text']} onChange={updateValue} id="special-text"/><br/>
             </label>
-            <button onClick={submitClicked}>Submit Order.</button>
+            <button onClick={submitClicked}>Submit Order</button>
         </form>
     );
 }
