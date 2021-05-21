@@ -1,37 +1,19 @@
 import React from "react";
-import styled from "styled-components";
+import { Route } from "react-router";
+import Header from "./Components/Header";
 
 const App = () => {
-  const disableRefresh = (ev) => {
-    ev.preventDefault()
-  }
 
-const StyledHeader = styled.header`
-  display:flex;
-  justify-content:space-between;
-  background: red;
-  padding: 0 30px 0 30px;
-  align-items: center;
-  h1 {
-    font-size: 3rem;
-  }
-  ul {
-    color: white-smoke;
-    font-size: 1.5rem;
-  }
-  ul li a { color: yellow }
-  
-`
+
+
 
   return (
-      <StyledHeader>
-        <h1>Lambda Eats</h1>
-        <ul>
-          <li><a onClick={disableRefresh} href="/">Home</a></li>
-          <li><a onClick={disableRefresh} href="pizza/">Order</a></li>
-          <li>Contact</li>
-        </ul>
-      </StyledHeader>
+    <div id="AppPg">
+
+      <Route path="/" component={Header}>
+      </Route>
+    </div>
+      
   );
 };
 export default App;
