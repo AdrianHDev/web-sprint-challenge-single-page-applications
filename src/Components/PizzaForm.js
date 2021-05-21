@@ -29,7 +29,7 @@ const PizzaForm = () => {
     const [curPizza, setCurPizza] = useState(initialPizza)
 
     const submitRequest = (data) => {
-        axios.post('https://reqres.in/api/orders', data)
+        axios.post(reqUri, data)
             .catch(err => console.error(err))
             .then(res => console.log(res));
     }
