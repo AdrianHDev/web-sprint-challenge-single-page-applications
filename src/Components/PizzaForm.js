@@ -51,6 +51,25 @@ const PizzaForm = () => {
                     <option value="large">large</option>
                 </select>
             </label><br/>
+            <label>
+                Toppings:
+                <label>
+                    Pepperoni:
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pepperoni} name='pepperoni'></input>
+                </label><br/>
+                <label>
+                    Sausage:
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.sausage} name='sausage'></input>
+                </label><br/>
+                <label>
+                    Canadian Bacon:
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza['canadian-bacon']} name='canadian-bacon'></input>
+                </label><br/>
+                <label>
+                    Pineapple:
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pineapple} name='pineapple'></input>
+                </label><br/>
+            </label>
 
         </form>
     );
