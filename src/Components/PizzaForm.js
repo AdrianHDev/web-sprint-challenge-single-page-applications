@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import  * as yup from "yup";
+import axios from 'axios';
+
+const reqUri = 'https://reqres.in/api/orders'
 
 const initialPizza = {
     name: "",
@@ -12,19 +15,37 @@ const initialPizza = {
 }
 
 const pizzaSchema = yup.object().shape({
-    name: yup.string().required().min(5, "name must be at least 2 characters"),
-    size: yup.string().required().matches(/(Small|Medium|Large)/),
+    name: yup.string().required().min(2, "name must be at least 2 characters"),
+    size: yup.string().required().matches(/(small|medium|large)/),
     pepperoni: yup.bool().required(),
     sausage: yup.bool().required(),
     "canadian-bacon": yup.bool().required(),
     pineapple: yup.bool().required(),
-    "special-text": yup.string().required(),
+    "special-text": yup.string(),
 })
 
 
 const PizzaForm = () => {
     const [curPizza, setCurPizza] = useState(initialPizza)
 
+    const submitRequest = (data) => {
+        axios.post('https://reqres.in/api/orders', data)
+            .catch(err => console.error(err))
+            .then(res => console.log(res));
+    }
+    const submitClicked = (event) => {
+        event.preventDefault();
+        let errors = [];
+        pizzaSchema.validate(curPizza)
+        .catch(e => {
+            console.error(e);
+            errors = e;
+        }).then(() => {
+            if (errors.length === 0) {
+                submitRequest(curPizza);
+            }
+        })
+    }
     const updateValue = (event) => {
         setCurPizza({ ...curPizza, [event.target.name]: event.target.value })
     }
@@ -77,7 +98,7 @@ const PizzaForm = () => {
                 <b>Special Instructions</b>:<br/>
                 <input type="text" value={curPizza['special-text']} onChange={updateValue} id="special-text"/><br/>
             </label>
-            <button>Submit Order.</button>
+            <button onClick={submitClicked}>Submit Order.</button>
         </form>
     );
 }
