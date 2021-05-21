@@ -38,14 +38,14 @@ const PizzaForm = () => {
     }
 
     return (
-        <form>
+        <form id='pizza-form'>
             <label>
                 Name:<br/>
-                <input type="text" name="name" value={curPizza.name}></input>
+                <input type="text" id='name-input' name="name" value={curPizza.name}></input>
             </label><br/>
             <label>
                 Size:<br/>
-                <select name="size" value={curPizza.size} onChange={handleSel}>
+                <select id='size-dropdown' name="size" value={curPizza.size} onChange={handleSel}>
                     <option value="small">small</option>
                     <option value="medium">medium</option>
                     <option value="large">large</option>
@@ -70,7 +70,11 @@ const PizzaForm = () => {
                     <input onChange={toggleTopping} type='checkbox' checked={curPizza.pineapple} name='pineapple'></input>
                 </label><br/>
             </label>
-
+            <label>
+                Special Instructions:
+                <input type="text" id="special-text"></input>
+            </label>
+            <button>Submit Order.</button>
         </form>
     );
 }
