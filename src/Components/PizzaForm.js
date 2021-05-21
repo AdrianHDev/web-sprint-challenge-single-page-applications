@@ -22,8 +22,10 @@ const PizzaForm = () => {
 
     const toggleTopping = (event) => {
         setCurPizza(() => {
-            return {...curPizza, [event.target.name]: event.target.value }
-        })
+            console.log(event.target.name)
+            return {...curPizza, [event.target.name]: !curPizza[event.target.name] }
+        });
+        console.log(curPizza);
     }
     const handleSel = (event) => {
         setCurPizza({ ...curPizza, [event.target.parent.name]: event.target.value })
@@ -33,7 +35,7 @@ const PizzaForm = () => {
         <form id='pizza-form'>
             <label>
                 <b>Name:</b><br/>
-                <input type="text" id='name-input' name="name" value={curPizza.name}></input>
+                <input type="text" id='name-input' name="name" value={curPizza.name} onChange={updateValue}></input>
             </label><br/>
             <label>
                 <b>Size:</b><br/>
@@ -47,24 +49,24 @@ const PizzaForm = () => {
                 <b>Toppings:</b><br/>
                 <label>
                     Pepperoni:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pepperoni} name='pepperoni'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={(curPizza.pepperoni === true)} name='pepperoni'></input>
                 </label><br/>
                 <label>
                     Sausage:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.sausage} name='sausage'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.sausage === true} name='sausage'></input>
                 </label><br/>
                 <label>
                     Canadian Bacon:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza['canadian-bacon']} name='canadian-bacon'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza['canadian-bacon'] === true} name='canadian-bacon'></input>
                 </label><br/>
                 <label>
                     Pineapple:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pineapple} name='pineapple'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pineapple === true} name='pineapple'></input>
                 </label><br/>
             </label>
             <label>
-                Special Instructions:
-                <input type="text" id="special-text"></input>
+                <b>Special Instructions</b>:<br/>
+                <input type="text" value={curPizza['special-text']} onChange={updateValue} id="special-text"/><br/>
             </label>
             <button>Submit Order.</button>
         </form>
