@@ -7,12 +7,12 @@ describe("Open Page", () => {
 
 describe("Fiil out form", () => {
     it('Fills out form, and verifies that checkboxes can be toggled', () => {
-        cy.get('input[name=name]').type('name').should('have.value', 'name');
+        cy.get('input[name=name]').type('Tony Stark').should('have.value', 'Tony Stark');
         cy.get('#size-dropdown').select('large').contains('Large');
-        cy.get('input[name=pepperoni]').click().should('have.checked', true);
+        cy.get('input[name=pepperoni]')
         cy.get('input[name=sausage]').click().should('have.checked', true);
         cy.get('input[name=canadian-bacon]').click().should('have.checked', true);
-        cy.get('input[name=pineapple]').click().should('have.checked', true);
+        cy.get('input[name=pineapple]')
         cy.get('input[name=special-text]').type('special text test').should('have.value', 'special text test');
     })
 })

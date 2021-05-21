@@ -17,64 +17,58 @@ const initialPizza = {
 const pizzaSchema = yup.object().shape({
     name: yup.string().required().min(2, "name must be at least 2 characters"),
     size: yup.string().required().matches(/(small|medium|large)/),
-    pepperoni: yup.bool().required(),
-    sausage: yup.bool().required(),
-    "canadian-bacon": yup.bool().required(),
-    pineapple: yup.bool().required(),
+    pepperoni: yup.bool(),
+    sausage: yup.bool(),
+    "canadian-bacon": yup.bool(),
+    pineapple: yup.bool(),
     "special-text": yup.string(),
 })
 
 
 const PizzaForm = () => {
-    const [curPizza, setCurPizza] = useState(initialPizza)
-    const [success, setSuccess] = useState();
+    const [curOrder, setCurOrder] = useState(initialPizza)
+    const [errors, setErrors] = useState([])
 
-    const submitRequest = (data) => {
-        axios.post(reqUri, data)
-            .catch(err => console.error(err))
-            .then(res => console.log(res));
-    }
 
     const submitClicked = (event) => {
         event.preventDefault();
-        let errors = [];
-        pizzaSchema.validate(curPizza)
+        setErrors([]);
+        pizzaSchema.validate(curOrder)
         .catch(e => {
-            console.error(e);
-            errors = e;
-            setSuccess(false)
-        }).then(() => {
-            if (errors.length === 0) {
-                submitRequest(curPizza);
-                setSuccess(true)
-            }
-        })
+            console.error(e.errors);
+            setErrors(e.errors);
+            console.log(e.errors.length)
+            return(e.errors)
+        }).then((errlist) => {
+            if (!Array.isArray(errlist)) {
+                console.log('Calling axios with list \n', curOrder)
+                axios.post("https://reqres.in/api/orders", curOrder)
+                    .then(response => console.log('Response:', response))
+                    .catch(err => console.error(err));}})
     }
+
     const updateValue = (event) => {
-        console.log(event);
-        setCurPizza({ ...curPizza, [event.target.name]: event.target.value })
+        setCurOrder({ ...curOrder, [event.target.name]: event.target.value })
     }
 
     const toggleTopping = (event) => {
-        setCurPizza(() => {
-            console.log(event.target.name)
-            return {...curPizza, [event.target.name]: !curPizza[event.target.name] }
+        setCurOrder(() => {
+            return {...curOrder, [event.target.name]: !curOrder[event.target.name] }
         });
-        console.log(curPizza);
     }
     const handleSel = (event) => {
-        setCurPizza({ ...curPizza, [event.target.name]: event.target.value })
+        setCurOrder({ ...curOrder, [event.target.name]: event.target.value })
     }
 
     return (
         <form id='pizza-form'>
             <label>
                 <b>Name:</b><br/>
-                <input type="text" id='name-input' name="name" value={curPizza.name} onChange={updateValue}></input>
+                <input type="text" id='name-input' name="name" value={curOrder.name} onChange={updateValue}></input>
             </label><br/>
             <label>
                 <b>Size:</b><br/>
-                <select id='size-dropdown' name="size" value={curPizza.size} onChange={handleSel}>
+                <select id='size-dropdown' name="size" value={curOrder.size} onChange={handleSel}>
                     <option value="small">Small</option>
                     <option value="medium">Medium</option>
                     <option value="large">Large</option>
@@ -84,26 +78,29 @@ const PizzaForm = () => {
                 <b>Toppings:</b><br/>
                 <label>
                     Pepperoni:
-                    <input onChange={toggleTopping} type='checkbox' checked={(curPizza.pepperoni === true)} name='pepperoni'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={(curOrder.pepperoni === true)} name='pepperoni'></input>
                 </label><br/>
                 <label>
                     Sausage:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.sausage === true} name='sausage'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curOrder.sausage === true} name='sausage'></input>
                 </label><br/>
                 <label>
                     Canadian Bacon:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza['canadian-bacon'] === true} name='canadian-bacon'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curOrder['canadian-bacon'] === true} name='canadian-bacon'></input>
                 </label><br/>
                 <label>
                     Pineapple:
-                    <input onChange={toggleTopping} type='checkbox' checked={curPizza.pineapple === true} name='pineapple'></input>
+                    <input onChange={toggleTopping} type='checkbox' checked={curOrder.pineapple === true} name='pineapple'></input>
                 </label><br/>
             </label>
             <label>
                 <b>Special Instructions</b>:<br/>
-                <input name="special-text" type="text" value={curPizza['special-text']} onChange={updateValue} id="special-text"/><br/>
+                <input name="special-text" type="text" value={curOrder['special-text']} onChange={updateValue} id="special-text"/><br/>
             </label>
-            <button onClick={submitClicked}>Submit Order</button>
+            {errors.map(err => {
+                return(<b style={{color: 'red'}}>{err}<br/></b>)
+            })}
+            <button id='order-button' onClick={submitClicked}>Submit Order</button>
         </form>
     );
 }
